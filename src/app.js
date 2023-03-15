@@ -59,17 +59,11 @@ io.on("connection", async (socket)=> {
   console.log("cliente socket conectado!");
     
   socket.on("loadMessage", async () => {
-
-    console.log("aca estoy1");
     const textMessage = await managerMessage.getElements()
-    console.log("mensaje= ", textMessage);
-    
     socket.emit("pushMessage", textMessage)
   })
   
   socket.on("addMessage", async (newMessage) => {
-    console.log("aca estoy2", newMessage);
-
     await managerMessage.addElements([newMessage])  
 
     const textMessage = await managerMessage.getElements()    

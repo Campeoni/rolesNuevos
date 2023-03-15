@@ -4,7 +4,6 @@ export class ManagerMongoDB {
   #url
 
   constructor(url, collection, schema) {
-    console.log("aca llegue soy el constuctor");
     this.#url = url; //Atributo privado
     this.collection = collection;
     this.schema = new mongoose.Schema(schema);
