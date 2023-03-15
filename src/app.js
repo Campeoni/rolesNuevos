@@ -70,12 +70,11 @@ io.on("connection", async (socket)=> {
   socket.on("addMessage", async (newMessage) => {
     console.log("aca estoy2", newMessage);
 
-    await managerMessage.addElements([newMessage])    
+    await managerMessage.addElements([newMessage])  
+
     const textMessage = await managerMessage.getElements()    
     socket.emit("pushMessage", textMessage)
   })
-
-
 
 /*   socket.emit("getchat", async(info) => {
   
