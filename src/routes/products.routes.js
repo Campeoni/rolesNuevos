@@ -1,22 +1,28 @@
 import { Router } from "express";
-import  ProductsManager from "../controllers/ProductsManager.js";
+import { getManagerProducts } from '../dao/daoManager.js'
 
 const routerProducts = Router()
-const productsFile = new ProductsManager('src/models/products.txt')
+
+const data = await getManagerProducts();
+const managerProducts = new data();
 
 //Recupera todos los productos. puede ser limitado si se informa por URL
 routerProducts.get("/", async (req, res) => {
-  let { limit } = req.query;
-  const products = await productsFile.getProducts();
+  let { limit, page, sort, query } = req.query;
   
-  if (limit) { // Valida que se haya informado el limite
-    const productLimit = products.slice(0, limit);
-    res.send(JSON.stringify(productLimit)); //Muestra los productos Limitados
-  } else {
-    res.send(JSON.stringify(products)); // Muestro todos los productos
-  }
+  limit || (limit = 10)
+  page  || (page  =  1)
+
+  
+  console.log("sort= ", sort);
+  console.log("query= ", query);
+
+  const products = await managerProducts.getElements(limit);
+  res.send(products)
 });
-  
+
+
+  /* 
 //Recupera el producto por el id indicado en la URL
 routerProducts.get("/:pid", async (req, res) => {
   const products = await productsFile.getProductById(req.params.pid);  
@@ -40,6 +46,6 @@ routerProducts.put("/:pid", async (req, res) => {
 routerProducts.delete("/:pid", async (req, res) => {
   let answer = await productsFile.deleteProduct(req.params.pid);
   res.send(answer === true ? "Producto eliminado" : answer);   
-});
+}); */
 
 export default routerProducts

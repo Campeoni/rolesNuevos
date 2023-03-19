@@ -4,7 +4,6 @@ import * as path from 'path'
 import multer from 'multer'
 import { engine } from 'express-handlebars';
 import {Server} from "socket.io";
-import ProductManager from "./controllers/ProductsManager.js"
 import "dotenv/config"
 import { getManagerMessages } from "./dao/daoManager.js";
 
@@ -14,8 +13,6 @@ import routerCarts from './routes/carts.routes.js'
 import routerRealtimeProducts from './routes/productsWebSocket.routes.js'
 import routerProductsList from './routes/productsList.routes.js'
 import routerChat from './routes/chat.routes.js'
-
-const P_M = new ProductManager('src/models/products.txt');
 
 // Configurar Multer para almacenar los archivos subidos en el servidor
 const storage = multer.diskStorage({
@@ -68,47 +65,6 @@ io.on("connection", async (socket)=> {
     const textMessage = await managerMessage.getElements()    
     socket.emit("pushMessage", textMessage)
   })
-
-/*   socket.emit("getchat", async(info) => {
-  
-    const data = await getManagerMessages()
-    console.log("data tiene= ", data);
-    const managerMessage = new data.ManagerMessageMongoDB
-  
-    const mensaje = await managerMessage.getElements()
-    console.log("mensaje= ", mensaje);
-  }) */
-
-/*
-  socket.emit("getProducts", await P_M.getProducts());
-  
-  socket.on("addProduct", async product => {
-    socket.emit("resultAddProduct", await P_M.addProduct(product))
-    socket.emit("getProducts", await P_M.getProducts())
-  })
-
-  socket.on("deleteProduct", async id => {
-    socket.emit("resultDelectProduct", await P_M.deleteProduct(parseInt(id)))
-    socket.emit("getProducts", await P_M.getProducts())
-  })
-
-  socket.on("loadImage", async image => {
-    console.log("imagen: ", image );
-  })
-  */
-/*   //Recibe info desde el Front End con clave "mensaje_saludo"
-  socket.on("mensaje_saludo", info =>{    
-    console.log("mensaje_saludo=", info);
-  }) 
-  
-  //Recibe info desde el Fron End con clave "mensaje_con_objeto"
-  socket.on("mensaje_con_objeto", info =>{    //Cuando se recibe informacion del cliente (canal de conexion)
-    console.log("mensaje_con_objeto=", info);
-  }) 
-  
-  //Emite info desde el Servidor con clave "mensaje_general"
-  socket.emit("mensaje_general", "Hola, desde el servidor")   */
-  
 })
 
 //Routes
