@@ -51,13 +51,12 @@ app.set('views', path.resolve(__dirname, './views')); //__dirname + './views'
 //ServerIO
 const io = new Server(server)
 
-const data = await getManagerMessages();     
-const managerMessage = new data.ManagerMessageMongoDB;
-
+const data = await getManagerMessages();    
+const managerMessage = new data();
 //Conexion Server SocketIo
 io.on("connection", async (socket)=> {  
-  console.log("cliente socket conectado!");
-    
+  console.log("cliente socket conectado!");  
+  
   socket.on("loadMessage", async () => {
     const textMessage = await managerMessage.getElements()
     socket.emit("pushMessage", textMessage)
