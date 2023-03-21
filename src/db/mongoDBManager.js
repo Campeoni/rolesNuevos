@@ -6,12 +6,13 @@ export class ManagerMongoDB {
   constructor(url, collection, schema) {
     this.#url = url; //Atributo privado
     this.collection = collection;
-    this.schema = new mongoose.Schema(schema);
+    this.schema = schema;     
+    //this.schema = new mongoose.Schema(schema);      
     this.model = mongoose.model(this.collection, this.schema);
   }
 
   //metodo statico
-  async #setConnection() {
+  async _setConnection() {
     try {      
       await mongoose.connect(this.#url)
       console.log("MongoDB is connected!");
@@ -22,7 +23,7 @@ export class ManagerMongoDB {
 
   //Agrego 1 o varios elementos
   async addElements(elements){
-    this.#setConnection();
+    this._setConnection();
     try{  
       return await this.model.insertMany(elements)
     } catch(error) {
@@ -31,7 +32,7 @@ export class ManagerMongoDB {
   }
 
   async getElements(limit){
-    this.#setConnection();
+    this._setConnection();
     try{  
       return await this.model.find().limit(limit)
     } catch(error) {
@@ -39,7 +40,7 @@ export class ManagerMongoDB {
     }
   }
   async getElementById(id){
-    this.#setConnection();
+    this._setConnection();
     try{  
       return await this.model.findById(id)
     } catch(error) {
@@ -47,15 +48,15 @@ export class ManagerMongoDB {
     }
   }
   async updateElementById(id, info){
-    this.#setConnection();
+    this._setConnection();
     try{  
       return await this.model.findByIdAndUpdate(id, info)
     } catch(error) {
       return error
     }
   }
-  async DeleteElementById(id){
-    this.#setConnection();
+  async deleteElementById(id){
+    this._setConnection();
     try{  
       return await this.model.findByIdAndDelete(id)
     } catch(error) {
@@ -63,3 +64,4 @@ export class ManagerMongoDB {
     }
   }
 }
+

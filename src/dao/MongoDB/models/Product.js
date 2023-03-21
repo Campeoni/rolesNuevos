@@ -1,5 +1,7 @@
 import {ManagerMongoDB} from "../../../db/mongoDBManager.js";
 import {Schema} from "mongoose"
+import  paginate  from "mongoose-paginate-v2";
+
 
 const url = process.env.URLMONGODB;
 
@@ -19,8 +21,8 @@ const productSchema = new Schema({
   code: {
       type: String,
       required: true,
-      unique: true,
-      match: /^[a-zA-Z0-9]$/
+      unique: true
+      //match: /^[a-zA-Z0-9]$/
   },
   status: {
       type: Boolean,
@@ -40,8 +42,20 @@ const productSchema = new Schema({
   }
 })
 
-export default class ManagerProductMongoDB extends ManagerMongoDB{
+productSchema.plugin(paginate);  
+
+export class ManagerProductDB extends ManagerMongoDB{
   constructor() {
-    super(url, "products", productSchema)
+    super(url, "products", productSchema)     
+  }  
+
+async paginate(filter, options) {
+    this._setConnection()
+    try {
+        return await this.model.paginate(filter, options)
+    } catch (error) {
+        return error
+    }
   }
-}
+};
+

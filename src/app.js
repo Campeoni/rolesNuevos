@@ -49,7 +49,7 @@ app.set('views', path.resolve(__dirname, './views')); //__dirname + './views'
 const io = new Server(server)
 
 const data = await getManagerMessages();    
-const managerMessage = new data();
+const managerMessage = new data.ManagerMessageDB;
 //Conexion Server SocketIo
 io.on("connection", async (socket)=> {  
   console.log("cliente socket conectado!");  
@@ -77,9 +77,6 @@ app.use('/chat', routerChat)
 
 
 app.post('/upload', upload.single('file'), (req,res) =>{
-  console.log("req body: ",req.body);
-  console.log("req file: ", req.file);
-  
   res.send("imagen cargada")
 })
 
