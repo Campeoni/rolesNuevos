@@ -28,12 +28,14 @@ export class ManagerCartsDB extends ManagerMongoDB{
     super(url, "carts", cartsSchema)
 
   }  
-  async getElementById(id){
+   getElementById = async (cid) => {
     this._setConnection();
-    try{  
-      return await this.model.findById(id).populate('products.productId')
+    try {  
+      
+      const result = await this.model.findById(cid)
+      return await result.populate('products.productId')
     } catch(error) {
-      return error
+      return error.message
     }
   }
 

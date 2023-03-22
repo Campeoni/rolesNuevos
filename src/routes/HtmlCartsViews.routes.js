@@ -12,19 +12,21 @@ routerCartsHtmlViews.get('/carts/:cid', async (req, res) => {
   const { status, result } = data
 
   let products = []
-  for (const item of result.products) {
-      products.push({
-          title: item.productId.title,
-          description: item.productId.description,
-          price: item.productId.price,
-          quantity: item.quantity
-      })
-  }
+  if (result?.products){
+    for (const item of result.products) {
+        products.push({
+            title: item.productId.title,
+            description: item.productId.description,
+            price: item.productId.price,
+            quantity: item.quantity
+        })
+    }
+  } 
 
   res.render('cartsListHtml', {
       status,
       products,
-      cartID: req.params.cid
+      cartID: result?.products ? req.params.cid : "No existe"
   });
 
 });
