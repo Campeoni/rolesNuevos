@@ -107,7 +107,7 @@ export class ManagerCartsDB extends ManagerMongoDB{
     try {       
         const cart = await this.model.findById(cid).populate('products.productId')
 
-        cart.products = cart.products.filter((element)=> {element.productId.id!==pid})        
+        cart.products = cart.products.filter((element)=> {return element.productId.id!==pid})        
 
         await cart.save()
         return true

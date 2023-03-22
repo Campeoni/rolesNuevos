@@ -11,7 +11,8 @@ import { getManagerMessages } from "./dao/daoManager.js";
 import routerProducts from './routes/products.routes.js'
 import routerCarts from './routes/carts.routes.js'
 import routerRealtimeProducts from './routes/productsWebSocket.routes.js'
-import routerProductsList from './routes/productsList.routes.js'
+import routerProductsHtmlViews from './routes/HtmlProductsViews.routes.js'
+import routerCartsHtmlViews from './routes/HtmlCartsViews.routes.js'
 import routerChat from './routes/chat.routes.js'
 
 // Configurar Multer para almacenar los archivos subidos en el servidor
@@ -69,7 +70,8 @@ io.on("connection", async (socket)=> {
 
 //Routes
 app.use('/', express.static(__dirname + '/public'))
-app.use('/', routerProductsList)
+app.use('/', routerProductsHtmlViews)
+app.use('/', routerCartsHtmlViews)
 app.use('/api/products', routerProducts)
 app.use('/api/carts', routerCarts)
 app.use('/realtimeproducts', routerRealtimeProducts)

@@ -15,7 +15,7 @@ routerCarts.get("/:cid", async (req, res) => {
     const response = {
       status: "Success"
     }  
-    response.return = await managerCarts.getElementById(cid);      
+    response.result = await managerCarts.getElementById(cid);      
     
     
     res.send(response);
@@ -35,7 +35,7 @@ routerCarts.post("/", async (req, res) => {
     const response = {
       status: "Success"
     }  
-    response.return = await managerCarts.addElements();   
+    response.result = await managerCarts.addElements();   
     res.send(response); 
     
   } catch (error) {

@@ -46,8 +46,8 @@ routerProducts.get("/", async (req, res) => {
     const queryLink = query ? `&query=${query}` : ""
     const limitLink = limit ? `&limit=${limit}` : ""
     const sortLink = sort ? `&sort=${sort}` : ""
-    const prevPageLink = products.hasPrevPage ? `/api/products?page=${products.prevPage}${limitLink}${queryLink}${sortLink}` : null
-    const nextPageLink = products.hasNextPage ? `/api/products?page=${products.nextPage}${limitLink}${queryLink}${sortLink}` : null
+    const prevPageLink = products.hasPrevPage ? `?page=${products.prevPage}${limitLink}${queryLink}${sortLink}` : null
+    const nextPageLink = products.hasNextPage ? `?page=${products.nextPage}${limitLink}${queryLink}${sortLink}` : null
     
     const response = {
       status: "Success",

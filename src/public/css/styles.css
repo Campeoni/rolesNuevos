@@ -2,6 +2,46 @@ body {
   background-color: gainsboro;
 }
 
+nav {
+  display:flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-around;
+  background-color: rgb(173, 221, 223);
+  
+}
+
+.cartProducts{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.prueba{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.NavBarLogo{
+  font-size: x-large;
+  font-weight: bold;
+  color: brown;
+}
+
+.navBarLinks {
+  display:flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-around;
+  width: 60%;
+  
+}
+.navBarLinksLinks{
+  font-size: x-large;
+  font-weight: bold;
+}
+
 .productContainter {
   display: flex;
   flex-direction: row;
@@ -45,6 +85,7 @@ body {
 .category,
 .status,
 .descriptionList,
+.addProduct,
 .deleteButton {
   border: 1px solid black;
   width: 100%;
@@ -128,6 +169,14 @@ body {
   justify-content: center;
 }
 
+.addProduct {
+  flex-basis: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .deleteButton {
   flex-basis: 5%;
   display: flex;
@@ -161,4 +210,22 @@ img {
 .view-side-chat-content{
   width:  800px ;
   height: 300px;
+}
+
+.paginate{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+footer{
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: black;
+  color:aliceblue;
+  font-weight: bold;
+  font-size: xx-large;
 }
