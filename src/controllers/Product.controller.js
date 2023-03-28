@@ -33,7 +33,6 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
   };
   
   try {
-
     const products = await managerProducts.paginate(filter, options);
     const queryLink = query ? `&query=${query}` : ""
     const limitLink = limit ? `&limit=${limit}` : ""
@@ -54,7 +53,7 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
       nextLink: nextPageLink
     }  
 
-    res.send(response)
+    res.status(200).json(response)
 
   } catch (error) {
     res.status(500).json({
@@ -80,7 +79,6 @@ export const createProduct = async (req, res) => { //Inserta nuevo producto
 
 export const getProduct = async (req, res) => { //Recupera 1 producto
   const pid = req.params.pid
-
   try {      
       const response  = await managerProducts.getElementById(pid)
 

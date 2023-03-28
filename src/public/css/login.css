@@ -1,0 +1,20 @@
+.loginEmail{
+  margin-top: 15px;
+  margin-bottom: 7px;
+}
+
+.loginPass{
+  margin-bottom: 7px;
+}
+
+.loginButton{
+  margin-bottom: 10px;
+}
+
+nav {
+  display: none;
+}
+
+footer{
+  display: none;
+}

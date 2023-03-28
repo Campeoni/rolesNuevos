@@ -2,8 +2,7 @@ import {promises as fs} from 'fs';
 import PM from "./ProductsManager.js"
 const ProductsManager = new PM('src/models/products.txt')
 
-class CartsManager{
-  
+class CartsManager{  
   //Ejecuta apenas se instancia
   constructor(path) {     
     this.path = path
@@ -35,7 +34,7 @@ class CartsManager{
       return answer        
     }      
   } 
-    
+
   //Busca carrito por ID
   getCartById = async(id) => {
     try{              

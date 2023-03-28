@@ -4,7 +4,7 @@ import {Schema} from "mongoose";
 const url = process.env.URLMONGODB;
 
 const userSchema = new Schema({
-  name: {
+  firstname: {
     type: String,
     required: true
   },
@@ -44,11 +44,7 @@ export class ManagerUserDB extends ManagerMongoDB {
 
   async getUserByEmail(email) {
     super._setConnection()
-    try {
-        return await this.model.findOne({ email: email })
-    } catch (error) {
-        return error
-    }
+    return await this.model.findOne({ email: email })
   }
 }
 

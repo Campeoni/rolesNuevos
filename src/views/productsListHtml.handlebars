@@ -1,4 +1,14 @@
-<h1>Lista de productos</h1>
+<div class="userSession">
+  <div class="roleSession">Role: {{userRole}}</div>  
+  <div class="nameSession">User: {{userFirst}}</div>  
+</div>
+
+{{#if booleanAdmin}}
+  <h1>Lista de productos Para Admin</h1>
+{{else}}
+  <h1>Lista de productos</h1>
+{{/if}}
+
 
 <div class="productContainter">
 

@@ -229,3 +229,16 @@ footer{
   font-weight: bold;
   font-size: xx-large;
 }
+
+.userSession{
+  display: flex;
+  flex-direction: row-reverse;
+
+}
+.nameSession{
+  margin-right: 15px;
+}
+
+.roleSession{
+  margin-right: 25px;
+}

@@ -19,14 +19,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //Permite realizar consultas en la URL (req.query)
 app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(session({
-    store: MongoStore.create({
-        mongoUrl: process.env.URLMONGODB,
-        mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-        ttl: 90
-    }),
-    secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true
+  store: MongoStore.create({
+    mongoUrl: process.env.URLMONGODB,
+    mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+    ttl: 90
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true
 }))
 
 //Public folder
@@ -74,6 +74,7 @@ io.on("connection", async (socket)=> {
     const textMessage = await managerMessage.getElements()    
     socket.emit("pushMessage", textMessage)
   })
+
 })
 
 

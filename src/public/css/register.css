@@ -1,0 +1,31 @@
+nav {
+  display: none;
+}
+
+footer{
+  display: none;
+}
+
+.registerFirstName{
+  margin-top: 15px;
+}
+
+.registerLastName{
+  margin-top: 15px;
+}
+
+.registerUser{
+  margin-top: 15px;
+}
+
+.registerEmail{
+  margin-top: 15px;
+}
+
+.loginPass{
+  margin-top: 15px;
+}
+
+.registerButton{
+  margin-top: 15px;
+}
