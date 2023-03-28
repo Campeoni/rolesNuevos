@@ -1,4 +1,7 @@
-import {Schema, model} from "mongoose";
+import {ManagerMongoDB} from "../db/mongoDBManager.js";
+import {Schema} from "mongoose";
+
+const url = process.env.URLMONGODB;
 
 const userSchema = new Schema({
   name: {
@@ -24,17 +27,28 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  date: {
+  role: {
+    type: String,
+    default: "user"
+  },
+  createdAt: {
     type: Date,
     default: Date.now
   }
 });
 
-
-class ManagerUserMongoDB extends ManagerMongoDB {
+export class ManagerUserDB extends ManagerMongoDB {
   constructor() {
       super(url, "users", userSchema)
   }
+
+  async getUserByEmail(email) {
+    super._setConnection()
+    try {
+        return await this.model.findOne({ email: email })
+    } catch (error) {
+        return error
+    }
+  }
 }
 
-export default ManagerUserMongoDB

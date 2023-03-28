@@ -1,14 +1,14 @@
-import {ManagerMongoDB} from "../../../db/mongoDBManager.js";
+import {ManagerMongoDB} from "../db/mongoDBManager.js";
 import {Schema} from "mongoose"
 import  paginate  from "mongoose-paginate-v2";
-
 
 const url = process.env.URLMONGODB;
 
 const productSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   description: {
       type: String,
@@ -16,13 +16,14 @@ const productSchema = new Schema({
   },
   price: {
       type: Number,
-      required: true
+      required: true,
+      index: true
   },
   code: {
       type: String,
       required: true,
       unique: true
-      //match: /^[a-zA-Z0-9]$/
+      
   },
   status: {
       type: Boolean,
@@ -34,7 +35,8 @@ const productSchema = new Schema({
   },
   category: {
       type: String,
-      required: true
+      required: true,
+      index: true
   },
   thumbnail: {
       type: Array,
@@ -50,12 +52,12 @@ export class ManagerProductDB extends ManagerMongoDB{
   }  
 
 async paginate(filter, options) {
-    this._setConnection()
+    super._setConnection()
     try {
         return await this.model.paginate(filter, options)
     } catch (error) {
         return error
     }
   }
-};
+}
 

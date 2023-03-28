@@ -4,6 +4,8 @@ import "dotenv/config"
 const routerProductsHtmlViews = Router()
 
 const PRODUCTS_URL = `http://localhost:${process.env.PORT || 5000}/api/products`
+const CARTS_URL = `http://localhost:${process.env.PORT || 5000}/api/carts`
+
 
 routerProductsHtmlViews.get('/products', async (req, res) => {
 
@@ -38,7 +40,32 @@ routerProductsHtmlViews.get('/products', async (req, res) => {
     prevLink,
     nextLink
   })
-});
+})
+
+routerProductsHtmlViews.get('/Carts/:cid', async (req, res) => {
+  const response = await fetch(`${CARTS_URL}/${req.params.cid}`)
+  const data = await response.json()
+
+  const {products } = data
+
+  let auxProducts = []
+
+  if (products?.length > 0){
+    for (const item of products) {
+      auxProducts.push({
+        title: item.productId.title,
+        description: item.productId.description,
+        price: item.productId.price,
+        quantity: item.quantity
+      })
+    }
+  } 
+
+  res.render('cartsListHtml', {
+      auxProducts,
+      cartID: products?.length > 0 ? req.params.cid : "No existe"
+  })
+})
 
 export default routerProductsHtmlViews
 

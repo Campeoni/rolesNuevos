@@ -18,8 +18,16 @@ export const getManagerProducts = async() => {
 
 export const getManagerCarts = async() => {
   //importo mongodb o importar postgres depende la base de datos
-  const modeloProducto = seleccionBD == 1 
-    ? await import('./MongoDB/models/Carts.js')  
-    : await import('./Postgresql/models/Carts.js') 
-  return modeloProducto;
+  const modeloCart = seleccionBD == 1 
+    ? await import('./MongoDB/models/Cart.js')  
+    : await import('./Postgresql/models/Cart.js') 
+  return modeloCart;
+}
+
+export const getManagerUsers = async() => {
+  //importo mongodb o importar postgres depende la base de datos
+  const modeloUser = seleccionBD == 1 
+    ? await import('./MongoDB/models/User.js')  
+    : await import('./Postgresql/models/User.js') 
+  return modeloUser;
 }
