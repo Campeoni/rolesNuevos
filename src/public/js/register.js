@@ -1,6 +1,5 @@
 const firstName = document.getElementById("firstName")
 const lastName  = document.getElementById("lastName")
-const username      = document.getElementById("user")
 const email     = document.getElementById("email")
 const password  = document.getElementById("password")
 
@@ -17,11 +16,8 @@ const registerUser = () => {
 
   User.firstname  = firstName.value
   User.lastname   = lastName.value
-  User.username   = username.value
   User.email      = email.value
   User.password   = password.value
-
-  console.log(User);
 
   const request = {
     method: 'POST',

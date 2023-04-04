@@ -37,8 +37,10 @@ export const testLogin = async (req,res) => {
         req.session.userFirst = user.firstname
         req.session.role = user.role
         console.log(`${email} is ${user.role}`)
-        //console.table(req.session)        
-        res.redirect('/products')
+        console.table(req.session)        
+        res.status(200).json({
+          message: "success"          
+      })
       } else {
         res.status(401).json({
           message: "User or password incorrect"

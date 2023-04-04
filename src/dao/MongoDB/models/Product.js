@@ -51,10 +51,10 @@ export class ManagerProductDB extends ManagerMongoDB{
     super(url, "products", productSchema)     
   }  
 
-async paginate(filter, options) {
-    super._setConnection()
-    return await this.model.paginate(filter, options)
+  async paginate(filter, options) {
+      super._setConnection()
+      return await this.model.paginate(filter, options)
 
-  }
+    }
 }
 

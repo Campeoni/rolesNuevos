@@ -8,6 +8,8 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session';
 import MongoStore from 'connect-mongo'
 import routers from './routes/routes.js'
+import passport from "passport";
+import initializePassport from "./config/passport.js";
 
 import { getManagerMessages } from "./dao/daoManager.js";
 
@@ -28,6 +30,11 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
+
+//Passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Public folder
 app.use('/', express.static(__dirname + '/public'))
