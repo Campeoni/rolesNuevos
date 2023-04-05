@@ -25,7 +25,7 @@ const registerUser = () => {
     body: new URLSearchParams(User).toString()
   }
 
-  fetch('/api/user', request)
+  fetch('/api/user/register', request)
     .then(response => {
       if (response.ok) {
         window.location.href = '/';

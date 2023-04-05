@@ -17,7 +17,7 @@ const initializePassport = () => {
   const cookieExtractor = (req) => {
     //Si existe cookies, verifico si existe mi cookie. Sino se cumple ninguna de las 2 asigno null
     const token = req.cookies ? req.cookies.jwtCookies : null
-                                          // si no existe la cookie especifica, asigno undefined a token
+                              // si no existe la cookie especifica, asigno undefined a token
     return token
   }
 

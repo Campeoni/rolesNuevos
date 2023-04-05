@@ -43,8 +43,8 @@ app.use('/', express.static(__dirname + '/public'))
 app.use('/', routers)
 
 //if a URL is invalid display a message
-app.use(function(req, res, next) {
-  res.status(404).send('Lo siento, no se pudo encontrar la página que estás buscando.');
+app.use((req, res, next)=> {
+  res.status(404).send({error:'Lo siento, no se pudo encontrar la página que estás buscando.'});
 });
 
 //HandleBars Configuration
