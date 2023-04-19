@@ -10,6 +10,7 @@ import MongoStore from 'connect-mongo'
 import routers from './routes/routes.js'
 import passport from "passport";
 import initializePassport from "./config/passport.js";
+import config from "./config/config.js"
 
 import { getManagerMessages } from "./dao/daoManager.js";
 
@@ -19,14 +20,14 @@ const app = express();
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //Permite realizar consultas en la URL (req.query)
-app.use(cookieParser(process.env.COOKIE_SECRET))
+app.use(cookieParser(config.cookieSecret))
 app.use(session({
   store: MongoStore.create({
-    mongoUrl: process.env.URLMONGODB,
+    mongoUrl: config.urlMongoDb,
     mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     ttl: 90
   }),
-  secret: process.env.SESSION_SECRET,
+  secret: config.sessionSecret,
   resave: true,
   saveUninitialized: true
 }))
@@ -54,7 +55,7 @@ app.set('views', path.resolve(__dirname, './views')); //__dirname + './views'
 
 
 // Server launch
-app.set ("port", process.env.PORT || 5000)
+app.set ("port", config.port || 5000)
 
 const server = app.listen(app.get("port"), () => {
   console.log(`Server on port ${app.get("port")}`)

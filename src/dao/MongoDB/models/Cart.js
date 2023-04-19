@@ -1,11 +1,9 @@
 import {ManagerMongoDB} from "../db/mongoDBManager.js";
 import mongoose, {Schema} from "mongoose"
-import { getManagerProducts } from '../../daoManager.js' 
+import {managerProducts} from "../../../controllers/Product.controller.js"
+import config from "../../../config/config.js";
 
-const url = process.env.URLMONGODB;
-
-const data = await getManagerProducts();
-const managerProducts = new data.ManagerProductDB;
+const url = config.urlMongoDb;
 
 const cartsSchema = new mongoose.Schema({
   products: {

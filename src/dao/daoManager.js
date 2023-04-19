@@ -1,4 +1,5 @@
-const seleccionBD = process.env.DBSELECTION
+import config from '../config/config.js';
+const seleccionBD = config.dbSelection
 
 export const getManagerMessages = async() => {
   //importo mongodb o importar postgres depende la base de datos

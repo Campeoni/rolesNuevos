@@ -1,7 +1,8 @@
 import {ManagerMongoDB} from "../db/mongoDBManager.js";
 import {Schema} from "mongoose"
+import config from "../../../config/config.js";
 
-const url = process.env.URLMONGODB;
+const url = config.urlMongoDb;
 
 const messageSchema = new Schema({
   name: String, 

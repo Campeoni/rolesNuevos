@@ -1,7 +1,8 @@
 import {ManagerMongoDB} from "../db/mongoDBManager.js";
 import {Schema} from "mongoose";
+import config from "../../../config/config.js";
 
-const url = process.env.URLMONGODB;
+const url = config.urlMongoDb;
 
 const userSchema = new Schema({
   firstname: {
@@ -29,6 +30,10 @@ const userSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  }, 
+  idCart: {
+    type: Schema.Types.ObjectId,
+    ref: 'carts'
   }
 });
 

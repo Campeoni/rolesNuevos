@@ -1,8 +1,9 @@
 
 import { getSession } from "./session.controller.js"
+import config from "../config/config.js"
 
-const PRODUCTS_URL = `http://localhost:${process.env.PORT || 5000}/api/products`
-const CARTS_URL = `http://localhost:${process.env.PORT || 5000}/api/carts`
+const PRODUCTS_URL = `http://localhost:${config.port || 5000}/api/products`
+const CARTS_URL = `http://localhost:${config.port || 5000}/api/carts`
 
 export const productView = async (req, res) => {
   let { limit , page, query, sort } = req.query;

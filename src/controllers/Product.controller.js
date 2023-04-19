@@ -1,8 +1,8 @@
 import { getManagerProducts } from "../dao/daoManager.js";
 
 const data = await getManagerProducts()
-const managerProducts = new data.ManagerProductDB
-
+export const managerProducts = new data.ManagerProductDB
+            
 export const getProducts = async (req, res) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
   const ValidSort = ['asc', 'desc']
 

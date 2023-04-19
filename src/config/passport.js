@@ -3,8 +3,11 @@ import passport from 'passport'
 import GitHubStrategy from 'passport-github2'
 import jwt from 'passport-jwt'
 import { managerUser } from '../controllers/user.controller.js'
+import {managerCarts} from '../controllers/Cart.controller.js'
 import { createHash, validatePassword } from '../utils/bcrypt.js'
 import { authToken, generateToken } from '../utils/jwt.js'
+import config from "./config.js"
+
 
 
 //Passport se va a manejar como si fuera un middleware 
@@ -23,7 +26,7 @@ const initializePassport = () => {
 
   passport.use('jwt', new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), //De donde extraigo mi token
-    secretOrKey: process.env.SIGNED_COOKIE //Mismo valor que la firma de las cookies
+    secretOrKey: config.signedCookie  //Mismo valor que la firma de las cookies
   }, async(jwt_payload, done) =>{
     try {
       return done(null, jwt_payload)
@@ -46,11 +49,13 @@ const initializePassport = () => {
         return done(null, false) //null que no hubo errores || false que no se creo el usuario
       }
       const passwordHash = createHash(password)
+      const idCart = await managerCarts.addElements()
       const userCreated = await managerUser.addElements([{
         firstname: firstname,
         lastname: lastname,        
         email: email,
-        password: passwordHash
+        password: passwordHash, 
+        idCart: idCart[0].id
       }])      
       
       console.log("nunca se esta devolviendo TOKEN, ver si queda")
@@ -86,8 +91,8 @@ const initializePassport = () => {
   }))
   
   passport.use('github', new GitHubStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientID: config.clientId,
+    clientSecret: config.clientSecret,
     callbackURL: 'http://localhost:4000/authSession/githubSession'
   }, async (accessToken, refreshToken, profile, done) => {
     try {
@@ -98,11 +103,13 @@ const initializePassport = () => {
         return done(null, user)
       } else {
         const passwordHash = createHash('coder123')
+        const idCart = await managerCarts.addElements()
         const userCreated = await managerUser.addElements([{
           firstname: profile._json.login,
           lastname: profile._json.html_url,
           email: profile._json.email,
-          password: passwordHash //Contraseña por default ya que no puedo accder a la contraseña de github
+          password: passwordHash, //Contraseña por default ya que no puedo accder a la contraseña de github
+          idCart: idCart[0].id
         }])
         return done(null, userCreated)
       }
@@ -116,8 +123,7 @@ const initializePassport = () => {
     console.log(user)
     if (Array.isArray(user)) {
       return done(null, user[0]._id)
-    }
-    
+    }    
     return done(null, user._id)    
   })
 
