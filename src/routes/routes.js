@@ -9,7 +9,6 @@ import routerHtmlViews from './HtmlViews.routes.js'
 import routerChat from './chat.routes.js'
 import routerGithub from "./github.routes.js"
 import routerSession from './session.routes.js'
-import routerPoliticas from "./rutaPrueba_eliminar.routes.js"
 
 const router = Router()
 
@@ -22,7 +21,5 @@ router.use('/api/session', routerSession)
 router.use('/realtimeproducts', routerRealtimeProducts)
 router.use('/chat', routerChat)
 router.use('/authSession', routerGithub)
-router.use('/test', routerPoliticas)
-
 
 export default router

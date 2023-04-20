@@ -4,9 +4,14 @@ import { validatePassword } from "../utils/bcrypt.js"
 export const getSession = (req,res) => {
   try {
     if (req.session.login) {
-      const sessionData = {
-        name: req.session.userFirst,
-        rol: req.session.rol
+      const sessionData = {}
+            
+      if (req.session.userFirst) {
+        sessionData.name= req.session.userFirst
+        sessionData.rol= req.session.rol
+      } else {
+        sessionData.name= req.session.user.firstname
+        sessionData.rol= req.session.user.rol      
       }
       return sessionData
     } else {

@@ -60,7 +60,8 @@ const initializePassport = () => {
       
       console.log("nunca se esta devolviendo TOKEN, ver si queda")
       const token = generateToken(userCreated)
-      //console.log(token)
+      console.log("TOKEN=", token)
+
       return done(null, userCreated) //Usuario creado correctamente
 
     } catch (error) {
@@ -80,7 +81,7 @@ const initializePassport = () => {
       if (validatePassword(password, user.password)) { //Usuario y contraseña validos
         console.log("nunca se esta devolviendo TOKEN, ver si queda")
         const token = generateToken(user)
-        //console.log(token)
+        console.log("TOKEN=", token)
         return done(null, user)
       }
       return done(null, false) //Contraseña no valida
@@ -96,9 +97,9 @@ const initializePassport = () => {
     callbackURL: 'http://localhost:4000/authSession/githubSession'
   }, async (accessToken, refreshToken, profile, done) => {
     try {
-      console.log(profile)
+      //console.log("profile github",profile)
       const user = await managerUser.getUserByEmail(profile._json.email)
-
+      
       if (user) { //Usuario ya existe en BDD
         return done(null, user)
       } else {
