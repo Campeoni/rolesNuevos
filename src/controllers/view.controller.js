@@ -23,9 +23,9 @@ export const productView = async (req, res) => {
   
   const sessionData = getSession(req, res)
   const userFirst = sessionData.name
-  const userRole = sessionData.role
+  const userRol = sessionData.rol
 
-  const booleanAdmin = userRole === "admin" ? true : false
+  const booleanAdmin = userRol === "admin" ? true : false
 
   res.render("productsListHtml", { //Renderizar el siguiente contenido
     titulo: "Ecommerce Backend",    
@@ -43,7 +43,7 @@ export const productView = async (req, res) => {
     prevLink,
     nextLink,
     userFirst,
-    userRole,
+    userRol,
     booleanAdmin
   })
 }

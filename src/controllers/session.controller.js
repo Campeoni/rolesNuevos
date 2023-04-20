@@ -6,7 +6,7 @@ export const getSession = (req,res) => {
     if (req.session.login) {
       const sessionData = {
         name: req.session.userFirst,
-        role: req.session.role
+        rol: req.session.rol
       }
       return sessionData
     } else {
@@ -26,7 +26,7 @@ export const testLogin = async (req,res) => {
     if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
       req.session.login = true
       req.session.userFirst = "Admin Coder"
-      req.session.role = "admin"
+      req.session.rol = "admin"
       console.log(`${email} is admin`)
       res.redirect('/products')
     } else {
@@ -35,8 +35,8 @@ export const testLogin = async (req,res) => {
       if (user && validatePassword(password, user.password)) {
         req.session.login = true
         req.session.userFirst = user.firstname
-        req.session.role = user.role
-        console.log(`${email} is ${user.role}`)
+        req.session.rol = user.rol
+        console.log(`${email} is ${user.rol}`)
         console.table(req.session)        
         res.status(200).json({
           message: "success"          
