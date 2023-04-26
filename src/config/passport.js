@@ -60,6 +60,7 @@ const initializePassport = () => {
       
       console.log("nunca se esta devolviendo TOKEN, ver si queda")
       const token = generateToken(userCreated)
+      
       console.log("TOKEN=", token)
 
       return done(null, userCreated) //Usuario creado correctamente
@@ -101,7 +102,10 @@ const initializePassport = () => {
       const user = await managerUser.getUserByEmail(profile._json.email)
       
       if (user) { //Usuario ya existe en BDD
-        return done(null, user)
+        const token = generateToken(user)
+        console.log("TOKEN=", token)
+
+        return done(null, user, {token: token})
       } else {
         const passwordHash = createHash('coder123')
         const idCart = await managerCarts.addElements()
@@ -112,7 +116,11 @@ const initializePassport = () => {
           password: passwordHash, //Contraseña por default ya que no puedo accder a la contraseña de github
           idCart: idCart[0].id
         }])
-        return done(null, userCreated)
+
+        const token = generateToken(userCreated)
+        console.log("TOKEN=", token)
+
+        return done(null, userCreated, {token: token})
       }
     } catch (error) {
       return done(error)
@@ -135,3 +143,4 @@ const initializePassport = () => {
 }
 
 export default initializePassport
+

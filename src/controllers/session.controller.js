@@ -1,5 +1,6 @@
 import { managerUser } from "./user.controller.js"  //export instance of the user.controller class
 import { validatePassword } from "../utils/bcrypt.js"
+import { generateToken } from '../utils/jwt.js'
 
 export const getSession = (req,res) => {
   try {
@@ -42,10 +43,13 @@ export const testLogin = async (req,res) => {
         req.session.userFirst = user.firstname
         req.session.rol = user.rol
         console.log(`${email} is ${user.rol}`)
-        console.table(req.session)        
-        res.status(200).json({
-          message: "success"          
-      })
+        console.table(req.session)  
+        const token = generateToken(user)
+        res
+          .status(200)
+          .cookie('jwtCookies',token,{maxAge: 30000}).send('Cookie')
+/*           .json({message:"success"}) */
+
       } else {
         res.status(401).json({
           message: "User or password incorrect"
