@@ -8,7 +8,6 @@ import passport from "passport";
 import initializePassport from "./middleware/passport.js";
 import * as path from 'path'
 
-
 // Port setting
 const app = express(); 
 

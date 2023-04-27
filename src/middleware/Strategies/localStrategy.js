@@ -1,6 +1,6 @@
 import local from 'passport-local'
 import { managerUser } from '../../controllers/user.controller.js'
-import {managerCarts} from '../../controllers/Cart.controller.js'
+import {managerCarts} from '../../controllers/cart.controller.js'
 import { createHash, validatePassword } from '../../utils/bcrypt.js'
 import { authToken, generateToken } from '../utils/jwt.js'
 
