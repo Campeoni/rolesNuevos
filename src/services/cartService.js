@@ -1,4 +1,4 @@
-import cartModel from "../models/MongoDB/Cart.js";
+import cartModel from "../models/MongoDB/cart.js";
 
 export const findCartById = async (cid) => {
 	try {

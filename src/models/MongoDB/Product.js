@@ -1,9 +1,5 @@
-import {ManagerMongoDB} from "../db/mongoDBManager.js";
-import {Schema} from "mongoose"
+import { Schema, model } from "mongoose";
 import  paginate  from "mongoose-paginate-v2";
-import config from "../../../config/config.js";
-
-const url = config.urlMongoDb;
 
 const productSchema = new Schema({
   title: {
@@ -47,15 +43,7 @@ const productSchema = new Schema({
 
 productSchema.plugin(paginate);  
 
-export class ManagerProductDB extends ManagerMongoDB{
-  constructor() {
-    super(url, "products", productSchema)     
-  }  
+const productModel = model("Products", productSchema);
 
-  async paginate(filter, options) {
-      super._setConnection()
-      return await this.model.paginate(filter, options)
-
-  }
-}
+export default productModel
 

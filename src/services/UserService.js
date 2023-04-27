@@ -1,4 +1,4 @@
-import userModel from "../models/MongoDB/User.js";
+import userModel from "../models/MongoDB/user.js";
 
 export const findUsers = async () => {
     try {
@@ -9,9 +9,9 @@ export const findUsers = async () => {
     }
 }
 
-export const findUserById = async (id) => {
+export const findUserById = async (uid) => {
     try {
-        const user = await userModel.findById(id)
+        const user = await userModel.findById(uid)
         return user
     } catch (error) {
         throw new Error(error)
