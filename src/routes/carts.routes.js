@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {createCart,deleteProductsCart, updateCart, getCart, insertProductCart, updateQuantityProduct, deleteProductCart } from "../controllers/Cart.controller.js"
 
+// "/api/carts"
 const routerCarts = Router()
 
 routerCarts.post("/",createCart);

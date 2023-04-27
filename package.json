@@ -1,11 +1,11 @@
 {
-  "name": "eccomerce",
+  "name": "ecommerce-campeoni",
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",

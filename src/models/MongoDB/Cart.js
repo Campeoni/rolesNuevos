@@ -1,7 +1,7 @@
-import {ManagerMongoDB} from "../db/mongoDBManager.js";
+import {ManagerMongoDB} from "./db/mongoDBManager.js";
 import mongoose, {Schema} from "mongoose"
-import {managerProducts} from "../../../controllers/Product.controller.js"
-import config from "../../../config/config.js";
+import {managerProducts} from "../../controllers/Product.controller.js"
+import config from "../../config/config.js";
 
 const url = config.urlMongoDb;
 
