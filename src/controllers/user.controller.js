@@ -1,10 +1,15 @@
-import { getManagerUsers } from "../dao/daoManager.js";
-import { createHash } from "../utils/bcrypt.js";
+import { findUsers } from '../services/userService.js';
 
-const data = await getManagerUsers()
-export const managerUser = new data.ManagerUserDB
+export const getUsers = async (req, res) => {
+  try {
+      const users = await findUsers()
+      res.status(200).json({users})
 
-export const createUser = async (req, res) => {
-  res.send({status: "success", message: "User Created"})
+  } catch (error) {
+      res.status(500).send({
+          message: "Hubo un error en el servidor", 
+          error: error.message
+      })
+  }
 }
 

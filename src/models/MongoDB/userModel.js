@@ -32,6 +32,6 @@ const userSchema = new Schema({
     ref: 'carts'
   }
 });
-const userModel = model("users", userSchema);
 
+const userModel = model("users", userSchema);
 export default userModel

@@ -1,4 +1,6 @@
 import jwt from 'passport-jwt'
+import config from "../../config/config.js"
+
 
 const JWTStrategy = jwt.Strategy //Estrategia ded JWT
 const ExtractJWT = jwt.ExtractJwt //Extractor ya sea de headers o cookies, ect

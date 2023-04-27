@@ -1,5 +1,5 @@
-import { managerUser } from "./user.controller.js"  //export instance of the user.controller class
-import { validatePassword } from "../utils/bcrypt.js"
+import { findUserByEmail } from '../services/userService.js'  //export instance of the user.controller class
+import { validatePassword } from '../utils/bcrypt.js'
 import { generateToken } from '../utils/jwt.js'
 
 export const getSession = (req,res) => {
@@ -36,7 +36,7 @@ export const testLogin = async (req,res) => {
       console.log(`${email} is admin`)
       res.redirect('/products')
     } else {
-      const user = await managerUser.getUserByEmail(email)
+      const user = await findUserByEmail(email)
 
       if (user && validatePassword(password, user.password)) {
         req.session.login = true

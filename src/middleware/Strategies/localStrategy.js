@@ -1,8 +1,8 @@
 import local from 'passport-local'
-import { managerUser } from '../../controllers/user.controller.js'
-import {managerCarts} from '../../controllers/cart.controller.js'
+import { findUserByEmail, createUser } from '../../services/userService.js';
+import { createCart } from '../../services/cartService.js';
 import { createHash, validatePassword } from '../../utils/bcrypt.js'
-import { authToken, generateToken } from '../utils/jwt.js'
+import { generateToken } from '../../utils/jwt.js'
 
 
 
@@ -17,14 +17,14 @@ export const strategyRegister = new LocalStrategy({
     //Validar y crear Usuario
     const { firstname, lastname, email } = req.body
     try {
-      const user = await managerUser.getUserByEmail(username) //Username = email
+      const user = await findUserByEmail(username) //Username = email
 
       if (user) { //Usario existe
         return done(null, false) //null que no hubo errores || false que no se creo el usuario
       }
       const passwordHash = createHash(password)
-      const idCart = await managerCarts.addElements()
-      const userCreated = await managerUser.addElements([{
+      const idCart = await createCart()
+      const userCreated = await createUser([{
         firstname: firstname,
         lastname: lastname,        
         email: email,

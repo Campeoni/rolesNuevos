@@ -1,9 +1,8 @@
 import GitHubStrategy from 'passport-github2'
-
-import { managerUser } from '../../controllers/user.controller.js'
-import {managerCarts} from '../../controllers/cart.controller.js'
-import { createHash, validatePassword } from '../../utils/bcrypt.js'
-import { authToken, generateToken } from '../utils/jwt.js'
+import { findUserByEmail, createUser } from '../../services/userService.js';
+import { createCart } from '../../services/cartService.js';
+import { createHash } from '../../utils/bcrypt.js'
+import { generateToken } from '../../utils/jwt.js'
 import config from "../../config/config.js"
 
 
@@ -17,7 +16,7 @@ const githubOptions = {
 export const strategyGithub = new GitHubStrategy(githubOptions, async (accessToken, refreshToken, profile, done) => {
   try {
     //console.log("profile github",profile)
-    const user = await managerUser.getUserByEmail(profile._json.email)
+    const user = await findUserByEmail(profile._json.email)
     
     if (user) { //Usuario ya existe en BDD
       const token = generateToken(user)
@@ -25,8 +24,8 @@ export const strategyGithub = new GitHubStrategy(githubOptions, async (accessTok
       return done(null, user, {token: token})
     } else {
       const passwordHash = createHash('coder123')
-      const idCart = await managerCarts.addElements()
-      const userCreated = await managerUser.addElements([{
+      const idCart = await createCart()
+      const userCreated = await createUser([{
         firstname: profile._json.login,
         lastname: profile._json.html_url,
         email: profile._json.email,

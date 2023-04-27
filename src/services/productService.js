@@ -1,38 +1,44 @@
-import userModel from "../models/MongoDB/product.js";
+import productModel from "../models/MongoDB/productModel.js";
 
-export const findUsers = async () => {
+export const paginateProducts = async (filter, options) => {
+  try {
+    return await productModel.paginate(filter, options);
+  } catch (error) {
+    throw error
+  }
+}
+
+export const findProductById = async (pid) => {
     try {
-        const users = await userModel.find()
-        return users
+        const product = await productModel.findById(pid)
+        return product
     } catch (error) {
         throw new Error(error)
     }
 }
 
-export const findUserById = async (id) => {
+export const createProduct = async (product) => {
     try {
-        const user = await userModel.findById(id)
-        return user
+        const newPoduct = await productModel(product)
+        await newPoduct.save()
+        return newPoduct
     } catch (error) {
         throw new Error(error)
     }
 }
 
-export const findUserByEmail = async (email) => {
-    try {
-        const user = await userModel.findOne({ email: email })
-        return user
-    } catch (error) {
-        throw new Error(error)
-    }
+export const updateProduct = async (pid, data) => {
+  try {
+      return await productModel.findByIdAndUpdate(pid, data);
+  } catch (error) {
+      throw new Error(error);
+  }
 }
 
-export const createUser = async (user) => {
-    try {
-        const newUser = await userModel(user)
-        await newUser.save()
-        return newUser
-    } catch (error) {
-        throw new Error(error)
-    }
+export const deleteProductServ = async (pid) => {
+  try {
+      return await productModel.findByIdAndDelete(pid);
+  } catch (error) {
+      throw new Error(error);
+  }
 }

@@ -1,14 +1,11 @@
-import { getManagerProducts } from "../dao/daoManager.js";
+import { paginateProducts, findProductById, createProduct, updateProduct, deleteProductServ  } from "../services/productService.js";
 
-const data = await getManagerProducts()
-export const managerProducts = new data.ManagerProductDB
             
 export const getProducts = async (req, res) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
   const ValidSort = ['asc', 'desc']
 
   let { limit , page, query, sort } = req.query;
   
-
   let sortOption = sort
 
   const filter = { stock: { $gt: 0 } } // Filtro Mongodb para traer productos con stock > 0
@@ -33,7 +30,7 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
   };
   
   try {
-    const products = await managerProducts.paginate(filter, options);
+    const products = await paginateProducts(filter, options);
     const queryLink = query ? `&query=${query}` : ""
     const limitLink = limit ? `&limit=${limit}` : ""
     const sortLink = sort ? `&sort=${sort}` : ""
@@ -62,11 +59,11 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
   }
 }
 
-export const createProduct = async (req, res) => { //Inserta nuevo producto
+export const postProduct = async (req, res) => { //Inserta nuevo producto
   const product = req.body
   
   try {      
-      const response = await managerProducts.addElements(product)
+      const response = await createProduct(product)
       
       res.status(200).json(response)
       
@@ -80,7 +77,7 @@ export const createProduct = async (req, res) => { //Inserta nuevo producto
 export const getProduct = async (req, res) => { //Recupera 1 producto
   const pid = req.params.pid
   try {      
-      const response  = await managerProducts.getElementById(pid)
+      const response  = await findProductById(pid)
 
       res.status(200).json(response) 
 
@@ -91,15 +88,15 @@ export const getProduct = async (req, res) => { //Recupera 1 producto
   }
 }
 
-export const updateProduct = async (req, res) => { // Modifica 1 producto
+export const putProduct = async (req, res) => { // Modifica 1 producto
   const pid = req.params.pid
   const product = req.body
   
   try {      
-      const response  = await managerProducts.updateElementById(pid, product)
+      const response  = await updateProduct(pid, product)
 
       if (response) {
-        const response  = await managerProducts.getElementById(pid)
+        const response  = await findProductById(pid)
         res.status(200).json(response)         
       } else {
         res.status(200).json("No existe ningun producto con ese ID para actualizar") 
@@ -111,11 +108,11 @@ export const updateProduct = async (req, res) => { // Modifica 1 producto
   }
 }
 
-export const deleteProduct = async (req, res) => { // Delete Product
+export const deleteProductCont = async (req, res) => { // Delete Product
   const pid = req.params.pid
   
   try {      
-      const response = await managerProducts.deleteElementById(pid)
+      const response = await deleteProductServ(pid)
 
       if (response) {
         res.status(200).json({
