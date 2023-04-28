@@ -24,6 +24,7 @@ export const strategyRegister = new LocalStrategy({
       }
       const passwordHash = createHash(password)
       const idCart = await createCart()
+      
       const userCreated = await createUser([{
         firstname: firstname,
         lastname: lastname,        

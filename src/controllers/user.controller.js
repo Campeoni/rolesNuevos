@@ -7,8 +7,8 @@ export const getUsers = async (req, res) => {
 
   } catch (error) {
       res.status(500).send({
-          message: "Hubo un error en el servidor", 
-          error: error.message
+        message: "Hubo un error en el servidor", 
+        error: error.message
       })
   }
 }

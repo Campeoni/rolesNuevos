@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getProducts, getProduct, postProduct, putProduct, deleteProductCont } from '../controllers/product.controller.js';
 
+//"/api/products"
 const routerProducts = Router()
 
 routerProducts.route("/")

@@ -107,7 +107,8 @@ export const putQuantityProduct = async (req, res) => {  //Modifica cantidades d
   const { quantity } = req.body
 
   try {
-      const cart = await cartModel.findById(cid).populate('products.productId')
+      let cart = await findCartById(cid)
+          cart = await cart.populate('products.productId')
       const existProduct = cart.products.find(element => element.productId.id === pid)
     
       if (existProduct) {
@@ -140,7 +141,7 @@ export const deleteProductCart = async (req, res) => {  //Elimina productos del 
       
       let cart = await findCartById(cid)
       cart = await cart.populate('products.productId')
-      
+
       const filteredCart = cart.products.filter((element)=> {return element.productId.id!==pid})        
       if (filteredCart.length !== cart.products.length){      
         cart.products = filteredCart

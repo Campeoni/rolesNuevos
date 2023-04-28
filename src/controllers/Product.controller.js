@@ -60,8 +60,7 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
 }
 
 export const postProduct = async (req, res) => { //Inserta nuevo producto
-  const product = req.body
-  
+  const product = req.body  
   try {      
       const response = await createProduct(product)
       
