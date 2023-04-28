@@ -66,9 +66,11 @@ export const addProductInCart = async (req, res) => {  //Inserta nuevos producto
 
   try {
       const product = await findProductById(pid)
-
+            
       if (product) {
-        const cart = await findCartById(cid).populate('products.productId')
+        let cart = await findCartById(cid)
+            cart = await cart.populate('products.productId')
+
         const existProduct = cart.products.find(element => element.productId.id === pid)
         
         if (!existProduct) {
@@ -82,6 +84,8 @@ export const addProductInCart = async (req, res) => {  //Inserta nuevos producto
             return element             
           })        
         }    
+        
+        
         await cart.save()
         
         res.status(200).json(cart)
@@ -133,7 +137,10 @@ export const deleteProductCart = async (req, res) => {  //Elimina productos del 
   const pid = req.params.pid
 
   try {
-      const cart = await findCartById(cid).populate('products.productId')
+      
+      let cart = await findCartById(cid)
+      cart = await cart.populate('products.productId')
+      
       const filteredCart = cart.products.filter((element)=> {return element.productId.id!==pid})        
       if (filteredCart.length !== cart.products.length){      
         cart.products = filteredCart
