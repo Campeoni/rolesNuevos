@@ -6,6 +6,7 @@ import routerGoogle from "./google.routes.js"
 import routerProducts from './products.routes.js'
 import routerSession from './session.routes.js'
 import routerUser from './user.routes.js'
+import routerChat from './chat.routes.js'
 
 const router = Router()
 
@@ -16,5 +17,6 @@ router.use('/api/user', routerUser)
 router.use('/api/session', routerSession)
 router.use('/authGithub', routerGithub)
 router.use('/authGoogle', routerGoogle)
+router.use('/Chat', routerChat)
 
 export default router
