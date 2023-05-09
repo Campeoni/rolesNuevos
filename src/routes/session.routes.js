@@ -1,12 +1,17 @@
 import {Router} from "express";
 import { testLogin, destroySession } from "../controllers/session.controller.js"
-import passport from "passport";
-import { passportError, roleVerification } from "../utils/errorMessages.js";
+import { postUser } from '../controllers/user.controller.js'
+import { passportError } from "../utils/errorMessages.js";
+import { roleVerification } from "../utils/rolVerification.js";
 
 //"api/session"
 const routerUser = Router();
 
-routerUser.post("/login", passport.authenticate('login'), testLogin)
+routerUser.route("/register")
+  .post(passportError('register'), postUser) 
+
+routerUser.post("/login",passportError('login'), testLogin)
+
 routerUser.get("/logout", destroySession)
 
 routerUser.get("/current", passportError('jwt'), roleVerification(['user']), (req, res) => {

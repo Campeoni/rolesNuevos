@@ -2,16 +2,16 @@ import { Router } from "express";
 import passport from 'passport'
 import { generateToken } from '../utils/jwt.js'
 
-/// "/authGithub"
-const routerGithub = Router()
+/// "/authGoogle"
+const routerGoogle = Router()
 
 
 // Register
-routerGithub.get('/github', passport.authenticate('github'), async (req, res) => { 
+routerGoogle.get('/google', passport.authenticate('google'), async (req, res) => { 
 })
 
 // Login
-routerGithub.get('/githubSession', passport.authenticate('github'), async (req, res) => {
+routerGoogle.get('/googleSession', passport.authenticate('google'), async (req, res) => {
     req.session.user = req.user
     console.log("req.session: ", req.session);
     if (req.session.user) {
@@ -25,4 +25,4 @@ routerGithub.get('/githubSession', passport.authenticate('github'), async (req, 
     }
 })
 
-export default routerGithub
+export default routerGoogle

@@ -12,6 +12,8 @@ export const generateToken = (user) => {
   return token
 }
 
+
+//ver para que sirve esto!
 export const authToken = (req, res, next) => {
   //Consultar en el header el token
   const authHeader = req.headers.authoritation

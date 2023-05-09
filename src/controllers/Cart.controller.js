@@ -17,7 +17,8 @@ export const getCart = async (req, res) => {//recupera el carrito especificado
   try {
     const cid = req.params.cid    
 
-    const cart = await findCartById(cid);
+    let cart = await findCartById(cid);
+        cart = await cart.populate('products.productId')
 
     if (cart.products.length !== 0 ){
       res.status(200).json(cart);
