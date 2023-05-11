@@ -31,10 +31,9 @@ export const strategyRegister = new LocalStrategy({
         idCart: idCart.id
       })      
       
-      console.log("nunca se esta devolviendo TOKEN, ver si queda")
-      const token = generateToken(userCreated)
-      
-      console.log("TOKEN=", token)
+      //console.log("nunca se esta devolviendo TOKEN, ver si queda")
+      //const token = generateToken(userCreated)
+      //console.log("TOKEN=", token)
 
       return done(null, userCreated) //Usuario creado correctamente
 
@@ -54,9 +53,9 @@ export const strategyLogin =  new LocalStrategy({
         return done(null, false)
       }
       if (validatePassword(password, user.password)) { //Usuario y contraseña validos
-        console.log("nunca se esta devolviendo TOKEN, ver si queda")
-        const token = generateToken(user)
-        console.log("TOKEN=", token)
+        //console.log("nunca se esta devolviendo TOKEN, ver si queda")
+        //const token = generateToken(user)
+        //console.log("TOKEN=", token)
         return done(null, user)
       }
       return done(null, false) //Contraseña no valida

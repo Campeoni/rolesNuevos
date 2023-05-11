@@ -20,7 +20,7 @@ export const strategyGithub = new GitHubStrategy(githubOptions, async (accessTok
     
     if (user) { //Usuario ya existe en BDD
       const token = generateToken(user)
-      console.log("TOKEN=", token)
+      //console.log("TOKEN=", token)
       return done(null, user, {token: token})
     } else {
       const passwordHash = createHash('coder123')
@@ -33,7 +33,7 @@ export const strategyGithub = new GitHubStrategy(githubOptions, async (accessTok
         idCart: idCart.id
       })
       const token = generateToken(userCreated)
-      console.log("TOKEN=", token)
+      //console.log("TOKEN=", token)
 
       return done(null, userCreated, {token: token})
     }

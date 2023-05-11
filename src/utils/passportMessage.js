@@ -1,7 +1,7 @@
 import passport from "passport"
 
 
-export const passportError = (strategy) =>{ //valida con JSONWebToken
+export const passportMessage = (strategy) =>{ //valida con JSONWebToken
   return async(req,res,next) => {
     passport.authenticate(strategy, (error, user, info) => {
       if (error) { //Errores del Token (Token no valido, no posee el formato adecuado o no existe )

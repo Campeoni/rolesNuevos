@@ -33,7 +33,7 @@ export const testLogin = async (req,res) => {
       req.session.login = true
       req.session.userFirst = "Admin Coder"
       req.session.rol = "admin"
-      console.log(`${email} is admin`)
+      console.log(`${email} is ${user.rol}d`)
       res.redirect('/products')
     } else {
       const user = await findUserByEmail(email)

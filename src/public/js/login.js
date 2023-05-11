@@ -15,7 +15,7 @@ const login = () => {
   credentials.email = email.value
   credentials.password = password.value
 
-  console.log(credentials);
+  //console.log(credentials);
 
   const request = {
     method: 'POST',

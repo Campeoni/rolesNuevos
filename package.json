@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js --mode dev"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +32,7 @@
     "socket.io": "^4.6.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "nodemon": "^2.0.20"
   }
 }

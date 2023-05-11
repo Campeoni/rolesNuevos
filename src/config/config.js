@@ -1,19 +1,22 @@
 import dotenv from 'dotenv'
 import { Command } from 'commander'
+import { environment as dicEnvironment} from '../utils/dictionary.js'
 
 const program = new Command()
 
 program
   .option('--mode <mode>', "ingrese el modo de trabajo", 'dev')
+
 program.parse()
 
-const enviroment = program.opts().mode
+const environment  = program.opts().mode
 
-console.log("usted esta en: ", enviroment);
+console.log("ingreso el comando de ambiente: ", environment);
 
 dotenv.config({
-  path: enviroment === 'DEV' ? "./.env.dev" : "./.env.prod"
+  path: environment === dicEnvironment.development ? "./.env.dev" : "./.env.prod"
 })
+console.log("Estas usando el ambiente : ", process.env.AMBIENTE);
 
 export default {
   port: process.env.PORT,

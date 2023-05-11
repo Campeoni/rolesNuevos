@@ -29,13 +29,14 @@ socket.on("getProducts", products => {
   })
 })
 
-socket.on("resultAddProduct", mensaje => {
+//ver si eliminar
+/* socket.on("resultAddProduct", mensaje => {
   console.log("Resultado agregado del producto: ", mensaje);
 })
 
 socket.on("resultDelectProduct", mensaje => {
   console.log("Resultado eliminacion del producto: ", mensaje);
-})
+}) */
 
 addProduct = () => {
   const title        = document.getElementById("title")

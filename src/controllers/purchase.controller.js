@@ -1,6 +1,9 @@
 import {findTicketById, findTicketByCode, findTicketMaxCode, createTicket } from "../services/ticketService.js";
 import {findCartById, deleteProducts } from '../services/cartService.js'
 import {updateProduct} from '../services/productService.js'
+import {mongoose} from "mongoose"
+
+
 
 export const getTicketById = async (req, res) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
   try {
@@ -35,6 +38,11 @@ export const getTicketByCode = async (req, res) => {  //Recupera todos los produ
 export const purchaseCart = async (req, res) => { //Inserta nuevo producto
   const cid = req.params.cid
   const mail = req.user.user.email  
+  
+  // Iniciar una transacción (sirve para poder hacer rollback en caso de falla)
+  const session = await mongoose.startSession();
+        session.startTransaction();
+  
   try {      
       let cart = await findCartById(cid);
           cart = await cart.populate('products.productId')
@@ -43,7 +51,6 @@ export const purchaseCart = async (req, res) => { //Inserta nuevo producto
       let ticket = {}
           
       if (cart.products.length > 0) {
-
         cart.products.forEach( async(product)=> {
           if ( product.productId.stock >= product.quantity){
             if (ticket.amount) {
@@ -55,14 +62,13 @@ export const purchaseCart = async (req, res) => { //Inserta nuevo producto
           } else {
             if (result.outOfStock) {
               result.outOfStock.push(product.productId)
-
             } else {
               result.outOfStock = [product.productId]
             }
           }
         })
       } else {
-        res.status(200).send("carrito sin productos asociados")
+        return res.status(200).send("carrito sin productos asociados")
       }
     
       let code = await findTicketMaxCode()
@@ -72,11 +78,13 @@ export const purchaseCart = async (req, res) => { //Inserta nuevo producto
       await createTicket(ticket)
       await deleteProducts(cid)
       
+      await session.commitTransaction();
       //res.status(200).json(cart.products)
-      res.status(200).json(result)
+      return res.status(200).json(result)
       
   } catch (error) {
-    res.status(500).json({
+    await session.abortTransaction();
+    return res.status(500).json({
       message: error.message
     }) 
   }

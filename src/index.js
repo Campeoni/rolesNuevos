@@ -8,6 +8,7 @@ import passport from "passport";
 import initializePassport from "./middleware/passport.js";
 import session from 'express-session';
 import nodemailer from 'nodemailer' 
+import errorHandler from "./middleware/errors/errorHandler.js";
 
 import {Server} from "socket.io";
 import * as path from 'path'
@@ -46,6 +47,7 @@ app.get('/email', async (req,res)=>{
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //Permite realizar consultas en la URL (req.query)
 app.use(cookieParser(config.cookieSecret))
+app.use(errorHandler);
 
 //session
 app.use(session({  
@@ -69,7 +71,6 @@ const connectionMongoose = async () => {
 }
 
 connectionMongoose()
-
 
 //Routers
 app.use('/', routers)
