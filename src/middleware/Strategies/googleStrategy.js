@@ -9,7 +9,7 @@ import config from "../../config/config.js"
 const githubOptions = {
   clientID: config.clientIdGoogle,
   clientSecret: config.clientSecretGoogle,
-  callbackURL: 'http://localhost:5000/authGoogle/googleSession',
+  callbackURL: `http://localhost:${config.port}/authGoogle/googleSession`,
   scope: ['profile','email'] // scope: se solicita acceso al correo electrónico del usuario autenticado en GitHub. 
 }
 

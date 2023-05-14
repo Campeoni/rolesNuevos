@@ -1,7 +1,9 @@
 import { paginateProducts, findProductById, createProduct, updateProduct, deleteProductServ  } from "../services/productService.js";
-
+import CustomError from '../utils/erroresHandler/CustomError.js'
+import {EErrors} from '../utils/erroresHandler/enums.js'
+import {invalidSortErrorInfo, generateProductErrorInfo} from '../utils/erroresHandler/info.js'
             
-export const getProducts = async (req, res) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
+export const getProducts = async (req, res, next) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
   const ValidSort = ['asc', 'desc']
 
   let { limit , page, query, sort } = req.query;
@@ -14,15 +16,7 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
   limit || (limit = 10)  
   page  || (page  =  1)
 
-  if (ValidSort.includes(sort)){
-    sort === "asc" 
-      ? sortOption = "price"
-      : sortOption = "-price"
-
-  } else if (sort !== undefined) {
-    throw `Parametro invalido en el SORT: "${sort}", solo admite "asc" ó "desc"`
-  }
-
+  
   const options = { //Setea opciones
     page: parseInt(page),
     limit: parseInt(limit),
@@ -30,6 +24,20 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
   };
   
   try {
+    if (ValidSort.includes(sort)){
+      sort === "asc" 
+        ? sortOption = "price"
+        : sortOption = "-price"
+  
+    } else if (sort !== undefined) {
+      CustomError.createError({
+        name: "invalid parameter",
+        cause: invalidSortErrorInfo(sort),
+        message: "invalid parameter in sort",
+        code: EErrors.ROUTING_ERROR
+      })
+    }
+
     const products = await paginateProducts(filter, options);
     const queryLink = query ? `&query=${query}` : ""
     const limitLink = limit ? `&limit=${limit}` : ""
@@ -53,23 +61,26 @@ export const getProducts = async (req, res) => {  //Recupera todos los productos
     res.status(200).json(response)
 
   } catch (error) {
-    res.status(500).json({
-      message: error.message
-    }) 
+    next(error)
   }
 }
 
-export const postProduct = async (req, res) => { //Inserta nuevo producto
+export const postProduct = async (req, res, next) => { //Inserta nuevo producto
   const product = req.body  
   try {      
-      const response = await createProduct(product)
-      
+      if(!product.title || !product.description || !product.price || !product.code || !product.stock || !product.category)  {
+        CustomError.createError({
+          name: "Product creation error",
+          cause: generateProductErrorInfo(product),
+          message: "Error Trying create Product",
+          code: EErrors.ROUTING_ERROR
+        })
+      }  
+      const response = await createProduct(product)      
       res.status(200).json(response)
       
   } catch (error) {
-    res.status(500).json({
-      message: error.message
-    }) 
+    next(error)
   }
 }
 

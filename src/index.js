@@ -17,6 +17,7 @@ import {findMessages, updateMessage} from './services/messageService.js'
 
 const app = express(); 
 
+// Define las constantes necesarias para el servidor de correo
 let transporter = nodemailer.createTransport({// genero la forma de enviar informacion
   host: 'smtp.gmail.com', //defino el servicio de mail a utilizar (gmail)
   port: 465,
@@ -27,27 +28,10 @@ let transporter = nodemailer.createTransport({// genero la forma de enviar infor
   }
 })
 
-app.get('/email', async (req,res)=>{
-  await transporter.sendMail({
-    from:'Test coder nicolas.cammpeoni.dev@gmail.com',
-    //to: "franciscopugh01@gmail.com",
-    to: "nicolas.campeoni@gmail.com",
-    subject: "probando",
-    html:`
-    <div>
-      este es un mail de prueba
-    </div>
-    `,
-    attachments: []
-  })
-  res.send("email enviado")
-})
-
-//Middlewares
+// Define los middleware para la aplicación
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //Permite realizar consultas en la URL (req.query)
 app.use(cookieParser(config.cookieSecret))
-app.use(errorHandler);
 
 //session
 app.use(session({  
@@ -78,12 +62,30 @@ app.use('/', routers)
 //Public folder
 app.use('/', express.static(__dirname + '/public'))
 
+app.use(errorHandler); 
+
+app.get('/email', async (req,res)=>{
+  await transporter.sendMail({
+    from:'Test coder nicolas.cammpeoni.dev@gmail.com',
+    //to: "franciscopugh01@gmail.com",
+    to: "nicolas.campeoni@gmail.com",
+    subject: "probando",
+    html:`
+    <div>
+      este es un mail de prueba
+    </div>
+    `,
+    attachments: []
+  })
+  res.send("email enviado")
+})
+
 //if a URL is invalid display a message
 app.use((req, res, next)=> {
   res.status(404).send({error:'Lo siento, no se pudo encontrar la página que estás buscando.'});
 });
 
-// Server launch
+// Configura el puerto del servidor y lo inicia
 app.set ("port", config.port || 5000)
 
 const server = app.listen(app.get("port"), () => {
@@ -94,7 +96,6 @@ const server = app.listen(app.get("port"), () => {
 app.engine('handlebars', engine());   //configuración del motor de express
 app.set('view engine', 'handlebars'); //indica que usaremos el motor de vista handlebars
 app.set('views', path.resolve(__dirname, './views')); //__dirname + './views'
-
 
 //ServerIO
 const io = new Server(server)

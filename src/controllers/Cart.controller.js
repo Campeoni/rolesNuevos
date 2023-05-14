@@ -1,5 +1,12 @@
 import { findCartById, createCart, deleteProducts, updateProductsCart } from '../services/cartService.js'
 import { findProductById } from '../services/productService.js'
+import {findTicketById, findTicketByCode, findTicketMaxCode, createTicket } from "../services/ticketService.js";
+import {updateProduct} from '../services/productService.js'
+import CustomError from '../utils/erroresHandler/CustomError.js'
+import {EErrors} from '../utils/erroresHandler/enums.js'
+import {stockCartErrorInfo} from '../utils/erroresHandler/info.js'
+
+import {mongoose} from "mongoose"
 
 export const postCart = async (req, res) => {  //Inserta un nuevo carrito
   try {
@@ -61,7 +68,7 @@ export const putProductsCart = async (req, res) => {  // pisa todo el carrit con
   }
 }
 
-export const addProductInCart = async (req, res) => {  //Inserta nuevos producto al carrito especificado
+export const addProductInCart = async (req, res, next) => {  //Inserta nuevos producto al carrito especificado
   const cid = req.params.cid
   const pid = req.params.pid
 
@@ -81,11 +88,19 @@ export const addProductInCart = async (req, res) => {  //Inserta nuevos producto
           { 
             if( element.productId.id===pid){
               element.quantity++
+              if (element.quantity > element.productId.stock) {
+
+                CustomError.createError({
+                  name: "insufficient stocks",
+                  cause: stockCartErrorInfo({cart: element.quantity, stock:element.productId.stock}),
+                  message: "Not enough stock to add to the shopping cart",
+                  code: EErrors.ROUTING_ERROR
+                })
+              }
             }             
             return element             
           })        
         }    
-        
         
         await cart.save()
         
@@ -96,13 +111,11 @@ export const addProductInCart = async (req, res) => {  //Inserta nuevos producto
         throw new Error("Producto no existe")     
       }      
   } catch (error) {
-      res.status(500).json({
-        message: error.message
-      })
+      next(error)
   }
 }
 
-export const putQuantityProduct = async (req, res) => {  //Modifica cantidades de un producto
+export const putQuantityProduct = async (req, res, next) => {  //Modifica cantidades de un producto
   const cid = req.params.cid
   const pid = req.params.pid
   const { quantity } = req.body
@@ -117,6 +130,16 @@ export const putQuantityProduct = async (req, res) => {  //Modifica cantidades d
         { 
           if( element.productId.id===pid){
             element.quantity = quantity
+
+            if (element.quantity > element.productId.stock) {
+              
+              CustomError.createError({
+                name: "insufficient stocks",
+                cause: stockCartErrorInfo({cart: element.quantity, stock:element.productId.stock}),
+                message: "Not enough stock to add to the shopping cart",
+                code: EErrors.ROUTING_ERROR
+              })
+            }
           }   
           return element         
         })        
@@ -128,9 +151,7 @@ export const putQuantityProduct = async (req, res) => {  //Modifica cantidades d
       res.status(200).send(cart.products); 
   
     } catch (error) {
-      res.status(500).json({
-        message: error.message
-      })
+      next(error)      
     }
 }
 
@@ -152,8 +173,94 @@ export const deleteProductCart = async (req, res) => {  //Elimina productos del 
         res.status(200).send("El producto no existe en el carrito");
       }    
   } catch (error) {
-    res.status(500).json({
+    res.status(500)
+    return (error).json({
       message: error.message
     })
+  }
+}
+
+export const getTicketById = async (req, res) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
+  try {
+    const tid = req.params.tid    
+
+    const ticket = await findTicketById(tid);
+
+    res.status(200).json(ticket) 
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    }) 
+  }
+}
+
+export const getTicketByCode = async (req, res) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
+  try {
+    const code = req.params.code    
+
+    const ticket = await findTicketByCode(code);
+
+    res.status(200).json(ticket) 
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    }) 
+  }
+}
+
+export const purchaseCart = async (req, res) => { //Inserta nuevo producto
+  const cid = req.params.cid
+  const mail = req.user.user.email  
+  
+  // Iniciar una transacción (sirve para poder hacer rollback en caso de falla)
+  const session = await mongoose.startSession();
+        session.startTransaction();
+  
+  try {      
+      let cart = await findCartById(cid);
+          cart = await cart.populate('products.productId')
+
+      let result = {}
+      let ticket = {}
+          
+      if (cart.products.length > 0) {
+        cart.products.forEach( async(product)=> {
+          if ( product.productId.stock >= product.quantity){
+            if (ticket.amount) {
+              ticket.amount += (product.productId.price * product.quantity)
+            } else {
+              ticket.amount = (product.productId.price * product.quantity)
+            }
+            await updateProduct(product.productId.id,{stock:(product.productId.stock - product.quantity)})
+          } else {
+            if (result.outOfStock) {
+              result.outOfStock.push(product.productId)
+            } else {
+              result.outOfStock = [product.productId]
+            }
+          }
+        })
+      } else {
+        return res.status(200).send("carrito sin productos asociados")
+      }
+    
+      let code = await findTicketMaxCode()
+      ticket.code = ++code
+      ticket.purchase_email = mail      
+
+      await createTicket(ticket)
+      await deleteProducts(cid)
+      
+      await session.commitTransaction();
+      //res.status(200).json(cart.products)
+      return res.status(200).json(result)
+      
+  } catch (error) {
+    await session.abortTransaction();
+    return res.status(500).json({
+      message: error.message
+    }) 
   }
 }

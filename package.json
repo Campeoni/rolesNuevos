@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js --mode dev"
+    "dev": "nodemon src/index.js --mode dev",
+    "prd": "nodemon src/index.js --mode prd"
   },
   "keywords": [],
   "author": "",
