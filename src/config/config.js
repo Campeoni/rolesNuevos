@@ -19,6 +19,7 @@ dotenv.config({
 console.log("Estas usando el ambiente : ", process.env.AMBIENTE);
 
 export default {
+  environment: process.env.AMBIENTE,
   port: process.env.PORT,
   urlMongoDb: process.env.URLMONGODB,
   dbSelection: process.env.DBSELECTION,  

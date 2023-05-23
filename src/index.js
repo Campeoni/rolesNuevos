@@ -14,6 +14,8 @@ import {Server} from "socket.io";
 import * as path from 'path'
 import { engine } from 'express-handlebars';
 import {findMessages, updateMessage} from './services/messageService.js'
+import { addLogger } from './utils/logger.js'
+
 
 const app = express(); 
 
@@ -53,6 +55,8 @@ const connectionMongoose = async () => {
   })
     .catch((err) => console.log(err));
 }
+
+app.use(addLogger)
 
 connectionMongoose()
 

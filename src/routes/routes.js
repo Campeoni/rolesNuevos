@@ -8,6 +8,7 @@ import routerSession from './session.routes.js'
 import routerUser from './user.routes.js'
 import routerChat from './chat.routes.js'
 import routerMockingProducts from './mockingProducts.routes.js'
+import routerLogger from './logger.routes.js'
 
 const router = Router()
 
@@ -20,5 +21,6 @@ router.use('/authGithub', routerGithub)
 router.use('/authGoogle', routerGoogle)
 router.use('/Chat', routerChat)
 router.use('/mockingproducts', routerMockingProducts)
+router.use('/loggerTest', routerLogger)
 
 export default router

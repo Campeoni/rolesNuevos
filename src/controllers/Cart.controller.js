@@ -216,7 +216,7 @@ export const purchaseCart = async (req, res) => { //Inserta nuevo producto
   
   // Iniciar una transacción (sirve para poder hacer rollback en caso de falla)
   const session = await mongoose.startSession();
-        session.startTransaction();
+        await session.startTransaction();
   
   try {      
       let cart = await findCartById(cid);
@@ -254,11 +254,15 @@ export const purchaseCart = async (req, res) => { //Inserta nuevo producto
       await deleteProducts(cid)
       
       await session.commitTransaction();
+      await session.endSession();
       //res.status(200).json(cart.products)
       return res.status(200).json(result)
       
   } catch (error) {
+
     await session.abortTransaction();
+    await session.endSession();
+
     return res.status(500).json({
       message: error.message
     }) 
