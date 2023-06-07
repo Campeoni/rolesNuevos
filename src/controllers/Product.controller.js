@@ -2,6 +2,7 @@ import { paginateProducts, findProductById, createProduct, updateProduct, delete
 import CustomError from '../utils/erroresHandler/CustomError.js'
 import {EErrors} from '../utils/erroresHandler/enums.js'
 import {invalidSortErrorInfo, generateProductErrorInfo} from '../utils/erroresHandler/info.js'
+import { roles } from "../utils/dictionary.js";
             
 export const getProducts = async (req, res, next) => {  //Recupera todos los productos. puede ser limitado si se informa por URL
   const ValidSort = ['asc', 'desc']
@@ -76,6 +77,14 @@ export const postProduct = async (req, res, next) => { //Inserta nuevo producto
           code: EErrors.ROUTING_ERROR
         })
       }  
+
+      if(req.user.user.rol === roles.premium){
+        product.owner = {
+          rol: roles.premium ,
+          userId: req.user.user._id
+        };
+      }
+
       const response = await createProduct(product)      
       res.status(200).json(response)
       

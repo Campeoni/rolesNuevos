@@ -37,6 +37,21 @@ const productSchema = new Schema({
   thumbnail: {
     type: Array,
     default: [""]
+  },
+  owner: {
+    type:{
+      rol:{
+        type: String
+        
+      },
+      userId:{
+        type: String        
+      }
+    },
+    default: {
+      rol: "admin", 
+      userId: ""
+    } 
   }
 })
 

@@ -9,11 +9,11 @@ const routerProducts = Router()
 
 routerProducts.route("/")
   .get(getProducts)
-  .post(passportMessage('jwt'), roleVerification([roles.admin]),postProduct)
+  .post(passportMessage('jwt'), roleVerification([roles.admin, roles.premium ]),postProduct)
 
 routerProducts.route("/:pid")
   .get(getProduct)
-  .put(passportMessage('jwt'), roleVerification([roles.admin]),putProduct)
-  .delete(passportMessage('jwt'), roleVerification([roles.admin]),deleteProductCont)
+  .put(passportMessage('jwt'), roleVerification([roles.admin, roles.premium]),putProduct)
+  .delete(passportMessage('jwt'), roleVerification([roles.admin, roles.premium]),deleteProductCont)
 
 export default routerProducts

@@ -1,6 +1,7 @@
 export const roles = {
   admin: 'admin',
   user: 'user',
+  premium: 'premium',
   guest: 'guest'
 };
 
