@@ -107,6 +107,7 @@ export const recoverPasswordEmail = async (req, res) => {
       .json({
           status: 'success',
           message: `Password reset link sent to ${email}`,
+          Link: resetLink,
           token: token
 
         })
