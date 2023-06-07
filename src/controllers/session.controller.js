@@ -1,6 +1,9 @@
-import { findUserByEmail } from '../services/userService.js'  //export instance of the user.controller class
-import { validatePassword } from '../utils/bcrypt.js'
-import { generateToken } from '../utils/jwt.js'
+import { findUserByEmail, updatePassword } from '../services/userService.js'  //export instance of the user.controller class
+import { createHash,validatePassword } from '../utils/bcrypt.js'
+import { generateTokenRestorePass,generateToken } from '../utils/jwt.js'
+import config from "../config/config.js"
+import {transporter} from "../utils/mail.js"
+
 
 export const getSession = (req,res) => {
   try {
@@ -33,7 +36,7 @@ export const testLogin = async (req,res) => {
       req.session.login = true
       req.session.userFirst = "Admin Coder"
       req.session.rol = "admin"
-      console.log(`${email} is ${user.rol}d`)
+      console.log(`${email} is ${user.rol}`)
       res.redirect('/products')
     } else {
       const user = await findUserByEmail(email)
@@ -62,6 +65,76 @@ export const testLogin = async (req,res) => {
       message: error.message
     })
   }
+}
+
+export const recoverPasswordEmail = async (req, res) => {
+  const { email } = req.params
+  try {
+    const user = await findUserByEmail(email)
+
+    if (!user) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Email not found in database'
+      })  
+    }
+
+  // * User email found
+    //const resetLink = await generatePasswordResetLink(user, req, res)
+    const resetLink = `http://localhost:${config.port || 5000}/recoverChangePassword`
+
+    const mailToSend = {
+      from: 'no-reply',
+      to: email,
+      subject: 'Password reset link',
+      html: `
+      <p>Muy buenas ${user.firstname},</p>
+      <p>Si deseas reestablecer la contraseña haz click <a href="${resetLink}">en el siguiente link</a> para reestablecer tu contraseña:</p>
+    
+      <p>Si no solicitaste un cambio de contraseña, ignora este email.</p>`
+    }
+    transporter.sendMail(mailToSend)
+
+    req.logger.info(`Password reset link sent to ${email}`)
+    const token = generateTokenRestorePass(email)
+
+    const oneHour = 60 * 60 * 1000; // 1 hora en milisegundos
+
+    return res
+      .status(200)
+      .cookie('jwtCookiesRestorePass',token,{maxAge: oneHour  , httpOnly: true} )
+      .clearCookie('booleanTimeOut')
+      .json({
+          status: 'success',
+          message: `Password reset link sent to ${email}`,
+          token: token
+
+        })
+
+  } catch (error) {
+    req.logger.error(`Error in password reset procedure - ${error.message}`)
+    res.status(500).send({
+      status: 'error',
+      message: error.message
+    })
+    next(error)
+}}
+
+
+export const changePass = async (req, res, next) => {
+  const { email, password } = req.body
+  const user = await findUserByEmail(email)
+
+  if (!validatePassword(password, user.password)) {  
+    const passwordHash = createHash(password) 
+    await updatePassword(user.id,passwordHash) 
+  } else {
+    return res.status(500).send("uso la misma password")
+  }
+
+  return res.status(200)
+  .clearCookie('jwtCookiesRestorePass')
+  .send("Password modificada")
 }
 
 export const destroySession = (req, res) => {

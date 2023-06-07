@@ -9,10 +9,12 @@ import routerUser from './user.routes.js'
 import routerChat from './chat.routes.js'
 import routerMockingProducts from './mockingProducts.routes.js'
 import routerLogger from './logger.routes.js'
+import routerHtmlViews from './htmlView.routes.js'
 
 const router = Router()
 
 //Routes
+router.use('/', routerHtmlViews)
 router.use('/api/products', routerProducts)
 router.use('/api/carts', routerCarts)
 router.use('/api/user', routerUser)

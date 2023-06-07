@@ -36,3 +36,14 @@ export const createUser = async (user) => {
         throw new Error(error)
     }
 }
+
+export const updatePassword = async (uid, password) => {
+    try {
+        const user = await userModel.findById(uid)
+        user.password = password
+        return await userModel.findByIdAndUpdate(uid, user);
+    } catch (error) {
+        throw new Error(error);
+    }
+} 
+

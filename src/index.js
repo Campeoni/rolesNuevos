@@ -7,28 +7,17 @@ import routers from './routes/routes.js'
 import passport from "passport";
 import initializePassport from "./middleware/passport.js";
 import session from 'express-session';
-import nodemailer from 'nodemailer' 
 import errorHandler from "./middleware/errors/errorHandler.js";
 
 import {Server} from "socket.io";
 import * as path from 'path'
 import { engine } from 'express-handlebars';
 import {findMessages, updateMessage} from './services/messageService.js'
+import {findUserByEmail} from './services/userService.js'
 import { addLogger } from './utils/logger.js'
 
 
 const app = express(); 
-
-// Define las constantes necesarias para el servidor de correo
-let transporter = nodemailer.createTransport({// genero la forma de enviar informacion
-  host: 'smtp.gmail.com', //defino el servicio de mail a utilizar (gmail)
-  port: 465,
-  auth:{
-    user:'nicolas.campeoni.dev@gmail.com',
-    pass: config.mailPass,
-    authMethod: 'LOGIN'
-  }
-})
 
 // Define los middleware para la aplicación
 app.use(express.json());
@@ -118,6 +107,12 @@ io.on("connection", async (socket)=> {
 
     const textMessage = await findMessages()    
     socket.emit("pushMessage", textMessage)
+  })
+
+  socket.on("mailValidation",async(email) => {
+    const answer = await findUserByEmail(email) 
+    socket.emit("answerMailValidation", answer)
+  
   })
 
 })

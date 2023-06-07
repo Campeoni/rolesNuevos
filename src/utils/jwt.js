@@ -12,6 +12,16 @@ export const generateToken = (user) => {
   return token
 }
 
+export const generateTokenRestorePass = (data) => {
+  /*
+    1er: Objeto de asociacion del token
+    2do: Clave privada del cifrado
+    3er: Tiempo de expiracion
+  */
+  const token = jwt.sign({data}, config.signedCookie, {expiresIn:'1h'})
+  return token
+}
+
 
 //ver para que sirve esto!
 export const authToken = (req, res, next) => {
@@ -37,4 +47,17 @@ export const authToken = (req, res, next) => {
     
     next()
   })
+}
+
+export const jwtReader = (tokenIn) => {
+  let token = null
+  try {
+    if (tokenIn){
+      return token = jwt.verify(tokenIn, config.signedCookie)
+    }
+  } catch (error) {
+    token = "timeOut"
+  }
+
+  return token
 }
