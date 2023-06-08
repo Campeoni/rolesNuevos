@@ -5,6 +5,7 @@ import {updateProduct} from '../services/productService.js'
 import CustomError from '../utils/erroresHandler/CustomError.js'
 import {EErrors} from '../utils/erroresHandler/enums.js'
 import {stockCartErrorInfo} from '../utils/erroresHandler/info.js'
+import { roles } from "../utils/dictionary.js";
 
 import {mongoose} from "mongoose"
 
@@ -71,10 +72,22 @@ export const putProductsCart = async (req, res) => {  // pisa todo el carrit con
 export const addProductInCart = async (req, res, next) => {  //Inserta nuevos producto al carrito especificado
   const cid = req.params.cid
   const pid = req.params.pid
+  let addProductFlag = true
 
   try {
-      const product = await findProductById(pid)
-            
+    const product = await findProductById(pid)
+
+    if (req.user.user.rol === roles.premium){   
+
+      const rolFlag = product?.owner.rol === roles.premium ?  true : false
+      const userFlag = product?.owner.userId === req.user.user._id ?  true : false
+        
+      if (rolFlag && userFlag){
+        addProductFlag = false
+      }
+    }
+
+    if (addProductFlag) {
       if (product) {
         let cart = await findCartById(cid)
             cart = await cart.populate('products.productId')
@@ -107,11 +120,15 @@ export const addProductInCart = async (req, res, next) => {  //Inserta nuevos pr
         res.status(200).json(cart)
 
       } else {
-
-        throw new Error("Producto no existe")     
+        throw new Error("Product does not exist")     
       }      
+    } else {
+      res.status(200).json({
+        delete: false,
+        message: "cannot add a cart created by the same user"}) 
+    }   
   } catch (error) {
-      next(error)
+    next(error)
   }
 }
 
@@ -144,7 +161,7 @@ export const putQuantityProduct = async (req, res, next) => {  //Modifica cantid
           return element         
         })        
       } else {          
-        throw new Error("Producto enviado no existe")       
+        throw new Error("Product shipped does not exist")       
       }
       await cart.save()
 
@@ -170,7 +187,7 @@ export const deleteProductCart = async (req, res) => {  //Elimina productos del 
         await cart.save()
         res.status(200).json(cart);
       } else {
-        res.status(200).send("El producto no existe en el carrito");
+        res.status(200).send("Product does not exist in the cart");
       }    
   } catch (error) {
     res.status(500)
@@ -243,7 +260,7 @@ export const purchaseCart = async (req, res) => { //Inserta nuevo producto
           }
         })
       } else {
-        return res.status(200).send("carrito sin productos asociados")
+        return res.status(200).send("cart without associated products")
       }
     
       let code = await findTicketMaxCode()

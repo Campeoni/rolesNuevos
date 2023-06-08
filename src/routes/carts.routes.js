@@ -15,8 +15,8 @@ routerCarts.route("/:cid")
   .put(putProductsCart)
 
 routerCarts.route("/:cid/products/:pid")
-  .post(passportMessage('jwt'),roleVerification([roles.user]), addProductInCart)
-  .put(passportMessage('jwt'),roleVerification([roles.user]), putQuantityProduct)
+  .post(passportMessage('jwt'),roleVerification([roles.user,  roles.premium]), addProductInCart)
+  .put(passportMessage('jwt'),roleVerification([roles.user,  roles.premium]), putQuantityProduct)
   .delete(deleteProductCart)
 
   

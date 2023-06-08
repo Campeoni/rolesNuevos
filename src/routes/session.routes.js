@@ -8,7 +8,8 @@ import { roles } from "../utils/dictionary.js";
 //"api/session"
 const routerUser = Router();
 
-routerUser.route("/register").post(passportMessage("register"), postUser);
+routerUser.route("/register")
+          .post(passportMessage("register"), postUser);
 
 routerUser.post("/login", passportMessage("login"), testLogin);
 

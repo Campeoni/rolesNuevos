@@ -110,8 +110,21 @@ export const getProduct = async (req, res) => { //Recupera 1 producto
 export const putProduct = async (req, res) => { // Modifica 1 producto
   const pid = req.params.pid
   const product = req.body
+  let updateFlag = true
   
   try {      
+    if (req.user.user.rol === roles.premium){
+      const product  = await findProductById(pid)
+
+      const rolFlag = product?.owner.rol === roles.premium ?  true : false
+      const userFlag = product?.owner.userId === req.user.user._id ?  true : false
+      
+
+      if (!(rolFlag && userFlag) ){
+        updateFlag = false
+      }
+    }
+    if (updateFlag){
       const response  = await updateProduct(pid, product)
 
       if (response) {
@@ -120,6 +133,11 @@ export const putProduct = async (req, res) => { // Modifica 1 producto
       } else {
         res.status(200).json("No existe ningun producto con ese ID para actualizar") 
       }
+    } else {
+      res.status(200).json({
+        delete: false,
+        message: "access denied to update the product"}) 
+    }
   } catch (error) {
     res.status(500).json({
       message: error.message
@@ -129,20 +147,41 @@ export const putProduct = async (req, res) => { // Modifica 1 producto
 
 export const deleteProductCont = async (req, res) => { // Delete Product
   const pid = req.params.pid
+  let deleteFlag = true
   
   try {      
-      const response = await deleteProductServ(pid)
+    if (req.user.user.rol === roles.premium){
+      const product  = await findProductById(pid)
 
+      const rolFlag = product?.owner.rol === roles.premium ?  true : false
+      const userFlag = product?.owner.userId === req.user.user._id ?  true : false
+      
+
+      if (!(rolFlag && userFlag) ){
+        deleteFlag = false
+      }
+    }
+
+    if (deleteFlag){
+      const response = await deleteProductServ(pid)
+      
       if (response) {
         res.status(200).json({
           delete: true,
-          message: "Producto eliminado"}) 
-      } else {
-        res.status(200).json({
-          delete: false,
-          message: "No existe ningun producto con ese ID para eliminar"}) 
-      }
-  } catch (error) {
+          message: "Product deleted"}) 
+        } else {
+          res.status(200).json({
+            delete: false,
+            message: "there is no product with this ID to be removed"}) 
+          }
+    } else {
+      res.status(200).json({
+        delete: false,
+        message: "access denied to remove the product"}) 
+    }
+
+  }
+  catch (error) {
     res.status(500).json({
       message: error.message
     }) 
